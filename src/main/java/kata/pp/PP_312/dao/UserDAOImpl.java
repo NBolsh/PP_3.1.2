@@ -8,6 +8,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserDAOImpl implements UserDAO {
@@ -40,6 +41,15 @@ public class UserDAOImpl implements UserDAO {
     @Transactional
     public void deleteUser(Long id) {
         em.remove(em.find(User.class, id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<User> findUserByEmail(String email){
+        String que = "SELECT u From User u where u.email = :email";
+
+        return Optional.ofNullable(em.createQuery(que, User.class).setParameter("email", email)
+                .getSingleResult());
     }
 
 

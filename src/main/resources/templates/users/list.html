@@ -14,6 +14,7 @@
             <th>Age</th>
             <th>Name</th>
             <th>Surname</th>
+            <th>Email</th>
             <th>Operations</th>
         </tr>
         <tr th:each ="user : ${allUsers}">
@@ -21,6 +22,7 @@
             <td th:utext="${user.getAge}">...</td>
             <td th:utext="${user.getName}">...</td>
             <td th:utext="${user.getSurname}">...</td>
+            <td th:utext="${user.getEmail}">...</td>
             <td>
                 <label>
                     <a th:href="@{/users/edit(userId=${user.getId})}">

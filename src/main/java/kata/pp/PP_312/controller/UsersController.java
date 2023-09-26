@@ -3,9 +3,11 @@ package kata.pp.PP_312.controller;
 
 import kata.pp.PP_312.model.User;
 import kata.pp.PP_312.service.UserService;
+import kata.pp.PP_312.util.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,11 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class UsersController {
     private UserService userService;
+    private UserValidator userValidator;
 
 
     @Autowired
-    public UsersController(UserService userService){
+    public UsersController(UserService userService, UserValidator userValidator){
         this.userService = userService;
+        this.userValidator = userValidator;
     }
 
     @GetMapping( "/users")
@@ -36,7 +40,12 @@ public class UsersController {
     }
 
     @PostMapping("/users")
-    public String addUser(@ModelAttribute("user") User user){
+    public String addUser(@ModelAttribute("user") User user,
+                          BindingResult bindingResult){
+
+        userValidator.validate(user, bindingResult);
+
+        if (bindingResult.hasErrors()) { return "/users/userInfo"; }
         userService.addUser(user);
         return "redirect:/users";
     }
