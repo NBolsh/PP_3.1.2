@@ -1,4 +1,4 @@
-package kata.pp.PP_312.controller;
+package kata.pp.PP_312.controllers;
 
 
 import kata.pp.PP_312.model.User;
@@ -7,12 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/users")
 public class UsersController {
     private UserService userService;
 
@@ -23,7 +21,7 @@ public class UsersController {
         this.userService = userService;
     }
 
-    @GetMapping( "/users")
+    @GetMapping
     public String showAllUsers(Model model){
 
         model.addAttribute("allUsers", userService.getAllUsers());
@@ -31,13 +29,13 @@ public class UsersController {
         return "/users/list";
     }
 
-    @GetMapping("/users/new")
+    @GetMapping("/new")
     public String newUser(Model model) {
         model.addAttribute("user",new User());
         return "/users/userInfo";
     }
 
-    @PostMapping("/users")
+    @PostMapping
     public String addUser(@ModelAttribute("user") User user,
                           BindingResult bindingResult){
 
@@ -46,14 +44,14 @@ public class UsersController {
         return "redirect:/users";
     }
 
-    @GetMapping("/users/edit")
+    @GetMapping("/edit")
     public String findUser(@RequestParam("userId") Long id,
                            Model model){
         model.addAttribute("user", userService.findUserById(id));
         return "/users/userInfo";
     }
 
-    @GetMapping("/users/delete")
+    @GetMapping("/delete")
     public String deleteUser(@RequestParam("userId") Long id) {
         userService.deleteUser(id);
         return "redirect:/users";
